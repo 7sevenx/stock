@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="stock-prediction">
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="fcsi-config-1.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/fcsi-config/fcsi-config">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="fcsi-core-1.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/fcsi-core/fcsi-core">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="fcsi-transform-1.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/fcsi-transform/fcsi-transform">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="fcsi-service-dict-1.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/fcsi-service-dict/fcsi-service-dict">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="fcsi-service-event-1.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/fcsi-service-event/fcsi-service-event">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="fcsi-channel-http-1.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/fcsi-channel-http/fcsi-channel-http">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="fcsi-orm-1.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/fcsi-orm/fcsi-orm">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="fcsi-util-1.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/fcsi-util/fcsi-util">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="fcsi-service-sqlmap-1.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/fcsi-service-sqlmap/fcsi-service-sqlmap">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="fcsi-service-id-1.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/fcsi-service-id/fcsi-service-id">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="java-output-path" value="/stock-prediction/target/classes"/>
+        <property name="context-root" value="stock-prediction"/>
+    </wb-module>
+</project-modules>

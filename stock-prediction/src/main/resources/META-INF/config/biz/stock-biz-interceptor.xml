@@ -1,0 +1,11 @@
+<b:beans xmlns:b="http://www.springframework.org/schema/beans" 
+	xmlns="http://www.vivebest.com/schema/finchas/i/fcsi-core" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+						http://www.vivebest.com/schema/finchas/i/fcsi-core http://www.vivebest.com/schema/finchas/i/fcsi-core-1.0.xsd">
+
+	<interceptors id="emptyInterceptor" />
+
+	<interceptors id="defaultInterceptor" />
+
+</b:beans>

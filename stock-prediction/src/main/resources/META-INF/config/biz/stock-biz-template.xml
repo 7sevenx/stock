@@ -1,0 +1,31 @@
+<b:beans xmlns:b="http://www.springframework.org/schema/beans" 
+	xmlns="http://www.vivebest.com/schema/finchas/i/fcsi-core" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+						http://www.vivebest.com/schema/finchas/i/fcsi-core http://www.vivebest.com/schema/finchas/i/fcsi-core-1.0.xsd">
+
+	<!-- Simple template for simple business processing. -->
+	<simple-template id="simpleTemplate" transactional="txTemplate">
+	  <action id="businessAction" place-holder="true"/>
+	</simple-template>
+	
+	<!-- Simple flow template for flow business processing. P.S. Must all step's useCtxstate=true-->
+	<flow-template id="simpleFlowTemplate">
+	  <step id="init" useCtxState="true" transactional="txTemplate">
+	    <action id="initAction"  place-holder="true"/>
+	    <next on="BP_STATE_NORMAL" to="businessProcessing"/>
+	    <next on="*" to="finalize"/>
+	  </step>
+	  <step id="businessProcessing"  useCtxState="true" transactional="txTemplate">
+	     <action id="businessAction" place-holder="true"/>
+	     <next on="*" to="finalize"/>
+	     <next on="BP_STATE_REVERSAL" to="rollback"/>
+	  </step>
+	  <step id="finalize" useCtxState="true" transactional="txTemplate">
+	      <action id="finalizeAction" place-holder="true"/>
+	  </step>
+	  <step id="rollback"  next="finalize" useCtxState="true">
+	     <action id="rollbackAction"  place-holder="true"/>
+	  </step>
+	</flow-template>
+</b:beans>

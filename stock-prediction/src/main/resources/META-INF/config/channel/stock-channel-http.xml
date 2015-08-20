@@ -1,0 +1,185 @@
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+						http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd">
+
+<!-- 从Client的Cookie中解析看是否有Locale信息如果有就使用,被MainServlet的 buildLocaleContext方法使用. 代码可以参考:org.springframework.web.servlet.i18n.CookieLocaleResolver. -->
+	<bean class="com.vivebest.finchas.i.bp.channel.http.support.SmartLocaleResolver">
+		<!-- <property name="defaultLocale" value="zh_CN" /> -->
+	</bean>
+	<!-- 从Client的Cookie中解析是否有theme的信息. 如果有就使用代码可以参考:org.springframework.web.servlet.theme.CookieThemeResolver -->
+	<bean class="com.vivebest.finchas.i.bp.channel.http.support.SmartThemeResolver">
+		<property name="defaultTheme" value="default" />
+	</bean>
+
+
+	<!-- 同时作为org.springframework.web.servlet.HandlerMapping及 org.springframework.web.servlet.HandlerAdapter的实现. 被MainServlet 使用. (1)mainServlet会调用此bean的getHandler方法取得Handler. (2)然后执行此bean的handle方法,委派给具体的endpoint做process 处理. -->
+	<bean class="com.vivebest.finchas.i.bp.channel.http.ServletURIEndpointMapping">
+		<property name="mapping">
+			<map>
+				<entry key="/**/*.do" value-ref="httpEndpoint" />
+				<entry key="/**/*.json" value-ref="httpJsonEndpoint" />
+				<entry key="/**/*.ajax" value-ref="httpJsonEndpoint" />
+			</map>
+		</property>
+		<property name="default" ref="httpEndpoint" />
+		<property name="handlerInterceptors">
+			<array>
+				<bean class="com.vivebest.finchas.i.bp.channel.http.support.LocaleChangeInterceptor"></bean>
+				<bean class="com.vivebest.finchas.i.bp.channel.http.support.ThemeChangeInterceptor"></bean>
+			</array>
+		</property>
+
+		<!-- 得到View名称,依照convention over configuration 的方式遵循以下原则: (1) view name 的prefix 在viewNames 的property文件中配置 key 为请求url,value为view name. (2) view name prefix+ChannelContext#state+.jsp 为view名称. eg: view name prefix=addUser ChannelContext.getState()="success"; 那么view 名称为addUser_success.jsp (3) 如果useLocal=true那么在view name 前面加上相关的locale 以上面的例子，如果locale 为true 且locale 为'zh_CN' 那么此view 得到的结果为:zh_CN/addUser_success.jsp -->
+		<property name="viewNameResolver">
+			<bean class="com.vivebest.finchas.i.bp.channel.http.support.DefaultViewNameResolver">
+				<property name="viewNames">
+					<util:properties location="classpath:/META-INF/config/view/viewNames.properties" />
+				</property>
+				<property name="errorViewNames">
+					<util:properties location="classpath:/META-INF/config/view/errorViewNames.properties" />
+				</property>
+				<!-- 多语言设置，默认值为true -->
+				<property name="useLocale" value="false"></property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="httpJsonEndpoint" class="com.vivebest.finchas.i.bp.channel.DefaultEndpoint">
+		<property name="interceptors">
+			<array>
+				<!-- Log4j 日志trace 日志使用. -->
+				<bean class="com.vivebest.finchas.i.bp.channel.interceptors.RequestTracingInterceptor" />
+				<bean class="com.vivebest.finchas.i.bp.channel.http.interceptors.FormPayloadChannelInterceptor">
+					<property name="exceptionHandler" ref="exceptionHandler"></property>
+				</bean>
+				
+				<!-- 从ServetRequest 中拿到客户端请求的JSON string: (1)将request uri 的值set 给ContextEx 作为process id. (2)将http request 中的JSON string 解析出来做为 channel context的payload,默认json string 的parameter key='REQ_MESSAGE' 可以被override. -->
+				<bean class="com.vivebest.finchas.i.bp.channel.http.interceptors.StreamPayloadChannelInterceptor">
+					<property name="extractIdentityFromURI" value="true"></property>
+					<!-- <property name="streamResolver">
+						<bean class="com.vivebest.finchas.i.bp.channel.http.interceptors.FormStreamResolver"></bean>
+					</property> -->
+				</bean>
+
+				<!-- 请求时将JSON string convert成Map set给ContextEx. 响应时将Map 转换为JSON string. -->
+				<bean class="com.vivebest.finchas.i.bp.channel.interceptors.TransformInterceptor">
+					<property name="exceptionHandler" ref="exceptionHandler"></property>
+					<property name="encodeTransforms">
+						<array>
+							<bean class="com.vivebest.finchas.i.bp.channel.http.interceptors.JsonEncoder">
+							</bean>
+						</array>
+					</property>
+					<property name="decodeTransforms">
+						<array>
+							<bean class="com.vivebest.finchas.i.bp.channel.interceptors.RequestTransform">
+							</bean>
+						</array>
+					</property>
+				</bean>
+				<bean class="com.vivebest.finchas.i.bp.channel.http.interceptors.FileUploadsInterceptor">
+					<property name="uploadResolver">
+						<bean class="com.vivebest.finchas.i.bp.channel.http.interceptors.upload.DefaultFileUploadResolver">
+<!-- 							<property name="sqlMap" ref="sqlMap"></property> -->
+							<property name="useContextPath" value="true" />
+<!-- 							<property name="uploadDir" value="c:\" /> -->
+						</bean>
+					</property>
+				</bean>
+
+				<!-- 如果是一个文件下载的将求在响应时向http response 输出流写文件. 工作的前提是: if(contextex.getData(b) instanceof File). -->
+				<bean class="com.vivebest.finchas.i.bp.channel.http.interceptors.FileDownloadInterceptor" />
+
+
+				<bean class="com.vivebest.finchas.i.bp.channel.http.interceptors.ServletContextInterceptor"></bean>
+				
+				
+			</array>
+		</property>
+	</bean>
+	<bean id="exceptionHandler" class="com.vivebest.finchas.i.bp.channel.interceptors.DefaultExceptionHandler">
+		<property name="messagesProvider" ref="messagesProvider"></property>
+		<property name="messageCodeMapping">
+			<map>
+				<entry key="validation_error" value="V0001"></entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="httpEndpoint" class="com.vivebest.finchas.i.bp.channel.DefaultEndpoint">
+		<property name="interceptors">
+			<array>
+				<bean class="com.vivebest.finchas.i.bp.channel.interceptors.RequestTracingInterceptor" />
+				<bean class="com.vivebest.finchas.i.bp.channel.http.interceptors.FormPayloadChannelInterceptor">
+					<property name="exceptionHandler" ref="exceptionHandler"></property>
+				</bean>
+
+				<bean class="com.vivebest.finchas.i.bp.channel.interceptors.TransformInterceptor">
+					<property name="exceptionHandler" ref="exceptionHandler"></property>
+					<property name="encodeTransforms">
+						<array>
+							<bean class="com.vivebest.finchas.i.bp.channel.interceptors.ResponseTransform">
+							</bean>
+
+						</array>
+					</property>
+					<property name="decodeTransforms">
+						<array>
+							<bean class="com.vivebest.finchas.i.bp.channel.interceptors.RequestTransform">
+							</bean>
+
+						</array>
+					</property>
+				</bean>
+	
+				<bean class="com.vivebest.finchas.i.bp.channel.http.interceptors.ContextGetIpInterceptor"/>
+				<bean class="com.vivebest.finchas.i.bp.channel.http.interceptors.FileUploadsInterceptor">
+					<property name="uploadResolver">
+						<bean class="com.vivebest.finchas.i.bp.channel.http.interceptors.upload.DefaultFileUploadResolver">
+<!-- 							<property name="sqlMap" ref="sqlMap"></property> -->
+							<property name="useContextPath" value="true" />
+<!-- 							<property name="uploadDir" value="c:\" /> -->
+						</bean>
+					</property>
+				</bean>
+				<bean class="com.vivebest.finchas.i.bp.channel.http.interceptors.FileDownloadInterceptor" />
+				
+				<!-- 图片预览 -->
+				<bean class="com.vivebest.finchas.i.bp.channel.http.interceptors.ServletContextInterceptor">
+					<!-- <property name="userSwitchPolicy" value="DENY" /> -->
+				</bean>
+			</array>
+		</property>
+	</bean>
+
+	<!-- Fcsi base 中采用Convention Over Configuration 思想: 
+	(1)采用MimeTypesViewResolver 做为view resolver. 
+	(2)MimeTypesViewResolver 本身不做生成View 的工作，而是根据 -->
+	<!-- MimeTypes for MimeTypesViewResolver, default view resovler -->
+	<bean class="com.vivebest.finchas.i.bp.channel.http.support.MimeTypes">
+		<property name="defaultContentType" value="text/html" />
+		<property name="mediaTypes">
+			<map>
+				<entry key="do" value="text/html" />
+			</map>
+		</property>
+
+		<property name="favorParameter" value="true" />
+		<property name="parameterName" value="mtype" />
+		<property name="ignoreAcceptHeader" value="true" />
+	</bean>
+
+	<!-- view resolvers -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="order" value="0" />
+		<property name="contentType" value="text/html" />
+		<property name="prefix" value="/WEB-INF" />
+	</bean>
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="maxUploadSize" value="-1" />
+	</bean>
+</beans>

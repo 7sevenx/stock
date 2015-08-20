@@ -1,0 +1,25 @@
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:f="http://www.vivebest.com/schema/finchas/i/fcsi-core" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.vivebest.com/schema/finchas/i/fcsi-core http://www.vivebest.com/schema/finchas/i/fcsi-core-1.0.xsd
+						http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+	
+	<context:annotation-config />
+	
+	<bean id="coreRegistry" class="com.vivebest.finchas.i.bp.core.impl.DefaultCoreRegistry" />
+
+	<bean id="coreDispatcher" class="com.vivebest.finchas.i.bp.core.impl.DefaultDispatcher">
+		<property name="coreRegistry" ref="coreRegistry" />
+		<property name="interceptors">
+			<array>
+				<f:interceptor class="com.vivebest.finchas.i.bp.core.interceptors.LockingProcessIdInterceptor" />
+				<f:interceptor class="com.vivebest.finchas.i.bp.core.interceptors.DataInterceptor">
+					<property name="multipleValidation" value="true" />
+				</f:interceptor>
+			</array>
+		</property>
+	</bean>
+	
+</beans>

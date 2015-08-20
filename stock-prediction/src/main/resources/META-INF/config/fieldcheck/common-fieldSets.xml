@@ -1,0 +1,45 @@
+<x:beans xmlns:x="http://www.springframework.org/schema/beans"
+	xmlns="http://www.vivebest.com/schema/finchas/i/fcsi-dict" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+						http://www.vivebest.com/schema/finchas/i/fcsi-dict http://www.vivebest.com/schema/finchas/i/fcsi-dict-1.0.xsd">
+
+	<field-common id="xxx">
+	</field-common>
+<field id="userName" style="RequiredText"></field>
+<field id="loginName" style="RequiredText"></field>
+<field id="roleID" style="RequiredText"></field>
+<field id="departmentID" style="RequiredText"></field>
+<field id="roleName" style="RequiredText"></field>
+<field id="departmentName" style="RequiredText"></field>
+
+	<field-map id="userCreateAction"> 
+		<field ref="userName"></field>
+		<field ref="loginName" ></field>
+		<field ref="roleID" ></field>
+		<field ref="departmentID"></field>
+	</field-map>
+	
+	<field-map id="userUpdateAction"> 
+		<field ref="userName"></field>
+		<field ref="loginName" ></field>
+		<field ref="roleID" ></field>
+		<field ref="departmentID"></field>
+	</field-map>
+	
+	<field-map id="roleCreateAction"> 
+	<field ref="roleName" ></field>
+	</field-map>
+	
+	<field-map id="roleUpdateAction"> 
+	<field ref="roleName" ></field>
+	</field-map>
+	
+	<field-map id="departmentCreateAction"> 
+	<field ref="departmentName" ></field>
+	</field-map>
+	
+	<field-map id="departmentUpdateAction"> 
+	<field ref="departmentName" ></field>
+	</field-map>
+	
+</x:beans>

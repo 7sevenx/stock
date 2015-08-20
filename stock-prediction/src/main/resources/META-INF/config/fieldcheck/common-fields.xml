@@ -1,0 +1,14 @@
+<x:beans xmlns:x="http://www.springframework.org/schema/beans"
+	xmlns="http://www.vivebest.com/schema/finchas/i/fcsi-dict" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+						http://www.vivebest.com/schema/finchas/i/fcsi-dict http://www.vivebest.com/schema/finchas/i/fcsi-dict-1.0.xsd">
+
+	<field id="transCode" type="string" style="RequiredText" />
+	<field id="transId" type="string" style="RequiredText" />
+	<field id="deviceId" type="string" style="RequiredText" />
+	<field id="submitTime" type="string" style="RequiredText" />
+
+	<field id="responseCode" type="string" style="RequiredText" />
+	<field id="responseMessage" type="string" style="RequiredText" />
+	<field id="transTime" type="string" style="RequiredText" />
+</x:beans>

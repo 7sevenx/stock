@@ -1,0 +1,250 @@
+<x:beans xmlns:x="http://www.springframework.org/schema/beans" 
+	xmlns="http://www.vivebest.com/schema/finchas/i/fcsi-dict" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+						http://www.vivebest.com/schema/finchas/i/fcsi-dict http://www.vivebest.com/schema/finchas/i/fcsi-dict-1.0.xsd">
+	
+	<!-- defined check styles -->
+	
+	<check-style id="Required">
+		<not-null/>
+	</check-style>
+	
+	<check-style id="RequiredText">
+		<not-null/>
+		<not-blank/>
+	</check-style>
+	
+	<check-style id="RequiredSize">
+		<not-null/>
+		<not-empty/>
+	</check-style>
+	
+	<!-- for string -->
+	<check-style id="MaxLengthTextStyle">
+		<max-length length="$(len)"/>
+	</check-style>
+	
+	<check-style id="RequiredMaxLengthTextStyle">
+		<not-null/>
+		<not-blank/>
+		<max-length length="$(len)"/>
+	</check-style>
+	
+	<check-style id="MinLengthTextStyle">
+		<min-length length="$(len)"/>
+	</check-style>
+	
+	<check-style id="RequiredMinLengthTextStyle">
+		<not-null/>
+		<not-blank/>
+		<min-length length="$(len)"/>
+	</check-style>
+
+	<check-style id="LengthTextStyle">
+		<length min="$(min)" max="$(max)"/>
+	</check-style>
+	
+	<check-style id="RequiredLengthTextStyle">
+		<not-null/>
+		<not-blank/>
+		<length min="$(min)" max="$(max)"/>
+	</check-style>
+	
+	<check-style id="PatternTextStyle">
+		<regex eval="$(regex)"/>
+	</check-style>
+
+	<check-style id="RequiredPatternTextStyle">
+		<not-null/>
+		<not-blank/>
+		<regex eval="$(regex)"/>
+	</check-style>	
+
+	<check-style id="MaxLengthPatternTextStyle">
+		<max-length length="$(len)"/>
+		<regex eval="$(regex)"/>
+	</check-style>
+	
+	<check-style id="RequiredMaxLengthPatternTextStyle">
+		<not-null/>
+		<not-blank/>
+		<max-length length="$(len)"/>
+		<regex eval="$(regex)"/>
+	</check-style>
+	
+	<check-style id="MinLengthPatternTextStyle">
+		<min-length length="$(len)"/>
+		<regex eval="$(regex)"/>
+	</check-style>
+	
+	<check-style id="RequiredMinLengthPatternTextStyle">
+		<not-null/>
+		<not-blank/>
+		<min-length length="$(len)"/>
+		<regex eval="$(regex)"/>
+	</check-style>
+
+	<check-style id="LengthPatternTextStyle">
+		<length min="$(min)" max="$(max)"/>
+		<regex eval="$(regex)"/>
+	</check-style>
+	
+	<check-style id="RequiredLengthPatternTextStyle">
+		<not-null/>
+		<not-blank/>
+		<length min="$(min)" max="$(max)"/>
+		<regex eval="$(regex)"/>
+	</check-style>
+	
+	<!-- for collections -->
+	<check-style id="MaxSizeStyle">
+		<max-size size="$(size)"/>
+	</check-style>
+	
+	<check-style id="RequiredMaxSizeStyle">
+		<not-null/>
+		<max-size size="$(size)"/>
+	</check-style>
+	
+	<check-style id="MinSizeStyle">
+		<min-size size="$(size)"/>
+	</check-style>
+	
+	<check-style id="RequiredMinSizeStyle">
+		<not-null/>
+		<min-size size="$(size)"/>
+	</check-style>
+
+	<check-style id="SizeStyle">
+		<size min="$(min)" max="$(max)"/>
+	</check-style>
+	
+	<check-style id="RequiredSizeStyle">
+		<not-null/>
+		<size min="$(min)" max="$(max)"/>
+	</check-style>
+	
+	<!-- for number -->
+	<check-style id="MaxStyle">
+		<max value="$(value)"/>
+	</check-style>
+	
+	<check-style id="RequiredMaxStyle">
+		<not-null/>
+		<max value="$(value)"/>
+	</check-style>
+	
+	<check-style id="MinStyle">
+		<min value="$(value)"/>
+	</check-style>
+	
+	<check-style id="RequiredMinStyle">
+		<not-null/>
+		<min value="$(value)"/>
+	</check-style>
+
+	<check-style id="RangeStyle">
+		<range value="[$(min),$(max)]"/>
+	</check-style>
+	
+	<check-style id="RequiredRangeStyle">
+		<not-null/>
+		<range value="[$(min),$(max)]"/>
+	</check-style>	
+	
+	<check-style id="RangeStyle1">
+		<range value="($(min),$(max)]"/>
+	</check-style>
+	
+	<check-style id="RequiredRangeStyle1">
+		<not-null/>
+		<range value="($(min),$(max)]"/>
+	</check-style>	
+	
+	<check-style id="RangeStyle2">
+		<range value="[$(min),$(max))"/>
+	</check-style>
+	
+	<check-style id="RequiredRangeStyle2">
+		<not-null/>
+		<range value="[$(min),$(max))"/>
+	</check-style>	
+
+	<check-style id="RangeStyle3">
+		<range value="($(min),$(max))"/>
+	</check-style>
+	
+	<check-style id="RequiredRangeStyle3">
+		<not-null/>
+		<range value="($(min),$(max))"/>
+	</check-style>	
+
+	<!-- for date -->
+	<check-style id="BeforeStyle">
+		<before date="$(date)"/>
+	</check-style>
+	
+	<check-style id="RequiredBeforeStyle">
+		<not-null/>
+		<before date="$(date)"/>
+	</check-style>
+	
+	<check-style id="AfterStyle">
+		<after date="$(date)"/>
+	</check-style>
+	
+	<check-style id="RequiredAfterStyle">
+		<not-null/>
+		<after date="$(date)"/>
+	</check-style>
+
+	<check-style id="BetweenStyle">
+		<between date="[$(min),$(max)]"/>
+	</check-style>
+	
+	<check-style id="RequiredBetweenStyle">
+		<not-null/>
+		<between date="[$(min),$(max)]"/>
+	</check-style>	
+	
+	<check-style id="BetweenStyle1">
+		<between date="($(min),$(max)]"/>
+	</check-style>
+	
+	<check-style id="RequiredBetweenStyle1">
+		<not-null/>
+		<between date="($(min),$(max)]"/>
+	</check-style>	
+	
+	<check-style id="BetweenStyle2">
+		<between date="[$(min),$(max))"/>
+	</check-style>
+	
+	<check-style id="RequiredBetweenStyle2">
+		<not-null/>
+		<between date="[$(min),$(max))"/>
+	</check-style>	
+	
+	<check-style id="BetweenStyle3">
+		<between date="($(min),$(max))"/>
+	</check-style>
+	
+	<check-style id="RequiredBetweenStyle3">
+		<not-null/>
+		<between date="($(min),$(max))"/>
+	</check-style>	
+	
+	<!-- customize check styles -->
+	<check-style id="EmailStyle">
+		<regex eval="^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\\-+)|([A-Za-z0-9]+\\.+)|([A-Za-z0-9]+\\++))*[A-Za-z0-9]+@((\\w+\\-+)|(\\w+\\.))*\\w{1,63}\\.[a-zA-Z]{2,6}$"/>
+	</check-style>
+
+	<check-style id="RequiredEmailStyle">
+		<not-null/>
+		<not-blank/>
+		<regex eval="^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\\-+)|([A-Za-z0-9]+\\.+)|([A-Za-z0-9]+\\++))*[A-Za-z0-9]+@((\\w+\\-+)|(\\w+\\.))*\\w{1,63}\\.[a-zA-Z]{2,6}$"/>
+	</check-style>
+		
+
+</x:beans>

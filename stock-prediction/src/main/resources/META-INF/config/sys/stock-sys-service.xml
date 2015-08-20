@@ -1,0 +1,90 @@
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:f="http://www.vivebest.com/schema/finchas/i/fcsi-core" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+						http://www.vivebest.com/schema/finchas/i/fcsi-core http://www.vivebest.com/schema/finchas/i/fcsi-core-1.0.xsd">
+
+	<bean id="serviceRegistry" class="com.vivebest.finchas.i.bp.service.DefaultServiceRegistry" />
+	
+	<bean id="globalIdTable" class="com.vivebest.finchas.i.bp.service.id.seq.SequenceTable" init-method="init">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+    <bean id="systemCode" class="com.vivebest.finchas.i.bp.SystemConfig" >
+	   <property name="systemCode" value="STOCK"/>
+	</bean>
+	
+<!-- 	<bean class="com.taifungbank.ibcp.bc.commons.I18nUtils" scope="singleton"> -->
+<!-- 	   <property name="messageProvider" ref="messagesProvider"/> -->
+<!-- 	</bean> -->
+
+    <!-- Message provider 提供整个平台的Message国际化功能(可以参考SpringMVC or Struts2的国际化). -->
+	<bean id="messagesProvider" class="com.vivebest.finchas.i.bp.DefaultMessagesProvider">
+		<property name="dataDictionary" ref="dataDictionary" />
+		<property name="defaultErrorKey" value="unknown" />
+		<property name="errorMessageSource">
+			<bean class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+				<property name="useCodeAsDefaultMessage" value="false" />
+				<property name="basenames">
+					<array>
+						<value>classpath:META-INF/config/i18n/errors</value>
+						<value>classpath:META-INF/config/i18n/errors_console</value>
+						<value>classpath:META-INF/config/i18n/errors_validation</value>
+					</array>
+				</property>
+				<property name="cacheSeconds" value="-1" />
+				<property name="defaultEncoding" value="UTF-8"></property>
+			</bean>
+		</property>
+		<property name="defaultMessageSource">
+			<bean
+				class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+				<property name="useCodeAsDefaultMessage" value="true" />
+				<property name="basenames">
+				   <array>
+				     <value>classpath:META-INF/config/i18n/messages</value>
+				   </array>
+				</property>
+				<property name="cacheSeconds" value="-1" />
+				<property name="defaultEncoding" value="UTF-8"></property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- 数据字典: 用户来较验Context中的数据格式,以及进行一些类型转换工作. -->
+	
+	<bean id="dataDictionary" class="com.vivebest.finchas.i.bp.service.dict.impl.DefaultDataDictionary">
+	   <!-- 自定义check style(较验规则). -->
+		<property name="checkStyleResources" value="classpath:META-INF/config/fieldcheck/*-styles.xml" />
+	   <!--  数据字典具体定义.-->
+		<property name="dataItemResources" value="classpath:META-INF/config/fieldcheck/*-field*.xml" />
+	</bean>
+
+    <!-- 将数据字典注册为服务. -->
+	<f:service type="com.vivebest.finchas.i.bp.service.dict.DataDictionary" ref="dataDictionary" />
+
+	<!-- 全局ID生成器服务 -->
+	<bean id="globalIdService" class="com.vivebest.finchas.i.bp.service.id.seq.StepSequenceFactory">
+		<property name="table" ref="globalIdTable" />
+		<property name="type" value="U" />
+		<property name="step" value="1" />
+	</bean>
+	
+	<bean id="timeService" class="com.vivebest.finchas.i.bp.service.id.seq.DefaultTimeService" />
+	
+	<bean id="seqNoTable" class="com.vivebest.finchas.i.bp.service.id.seq.SequenceTable" init-method="init">
+		<property name="dataSource" ref="dataSource" />
+		<property name="tableName" value="FCSI_SEQ_NO"/>
+		<property name="timeService" ref="timeService" />
+	</bean>	 
+		
+ 	<bean id="journalNoService" class="com.vivebest.finchas.i.bp.service.id.seq.StepSequenceFactory">
+		<property name="table" ref="seqNoTable" />
+		<property name="type" value="RQ" />
+		<property name="format" value="{yyyyMMdd}{#######}" />
+		<property name="step" value="1" />
+		<property name="dateCutoff" value="true" />
+	</bean>
+	
+	
+</beans>
