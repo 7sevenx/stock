@@ -22,7 +22,7 @@ public class StockQuotes {
 	 * 2-月
 	 * 3-年
 	 */
-	private Integer period;	//period
+	private Integer period = 0;	//period
 	
 	/**
 	 * 转换成更长周期的行情集
@@ -88,13 +88,31 @@ public class StockQuotes {
 	}
 	
 	/**
+	 * 获取某天的涨幅
+	 * <p>正数表示上涨，负数表示下跌
+	 * @return
+	 */
+	public BigDecimal getIncrease(Integer day){
+		if(this.quotes.size() == day){
+			return this.getQuote(day).getIncrease();
+		}
+		
+		StockQuote today = this.getQuote(day);
+		StockQuote yesterday  = this.getQuote(day + 1);
+		
+		BigDecimal yesterdayClosePrice = yesterday.getClosePrice();
+		BigDecimal todayClosePrice = today.getClosePrice();
+		return ((todayClosePrice.subtract(yesterdayClosePrice)).divide(yesterdayClosePrice, 2, RoundingMode.HALF_UP)).multiply(new BigDecimal("100"));
+	}
+	
+	/**
 	 * 获取平均涨幅
 	 * @return
 	 */
 	public BigDecimal getAverageIncrease(){
 		BigDecimal totalIncrease = BigDecimal.ZERO;
-		for(StockQuote sq : this.quotes){
-			totalIncrease.add(sq.getIncrease());
+		for(int i = 0; i < this.quotes.size(); i++){
+			totalIncrease = totalIncrease.add(this.getIncrease(i + 1));
 		}
 		return totalIncrease.divide(new BigDecimal(this.getQuotes().size()), 2, RoundingMode.HALF_UP);
 	}

@@ -171,7 +171,7 @@ public class StockQuote {
 	 * @return
 	 */
 	public boolean isBaldHead(){
-		return this.highPrice.compareTo(this.getRealMaxPrice().multiply(new BigDecimal("1.01"))) <= 0;
+		return this.highPrice.compareTo(this.getRealMaxPrice().multiply(new BigDecimal("1.002"))) <= 0;
 	}
 	
 	/**
@@ -179,7 +179,7 @@ public class StockQuote {
 	 * @return
 	 */
 	public boolean isBareFeet (){
-		return this.lowPrice.compareTo(this.getRealMinPrice().multiply(new BigDecimal("1.01"))) >= 0;
+		return this.lowPrice.compareTo(this.getRealMinPrice().multiply(new BigDecimal("1.002"))) >= 0;
 	}
 	
 	/**
@@ -207,7 +207,7 @@ public class StockQuote {
 	 */
 	public boolean isHammer() {
 		StandardEvaluationContext context= new StandardEvaluationContext(this);
-		//最高价 少于 开盘价与收盘价最大值的101%， 且开盘价与收盘价最小值 减去最低价的值 大于 开盘价减去收盘价的绝对值的1.5倍
+		//最高价 少于 开盘价与收盘价最大值的100.2%， 且开盘价与收盘价最小值 减去最低价的值 大于 开盘价减去收盘价的绝对值的1.5倍
 		boolean result = parser.parseExpression("isBaldHead() and getLowerShadowValue() ge getRealValue() * 1.5").getValue(context, boolean.class);
 		return result;
 	}
